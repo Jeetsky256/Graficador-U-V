@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import messagebox
 from math import *
+from tkinter import ttk
+
  
 root = tkinter.Tk()
 root.wm_title("Graficador u-v")
@@ -47,60 +49,71 @@ ran=""
 act_rango2=False
 ul_ran2=""
 ran2=""
-Con = ""
+
 def animate(i):
-    global act_rango
-    global ul_ran
-    if act_rango==True:
+    global act_rango2
+    global ul_ran2
+
+    if act_rango2==True:
         try:
-            lmin = float(ran[0]); lmax = float(ran[1])
-            if lmin < lmax:
-                x = np.arange(lmin, lmax, .01)#.01
-                ul_ran = [lmin, lmax]
+            lmin2 = float(ran2[0]); lmax2 = float(ran2[1])
+            if lmin2 < lmax2:
+                x = np.arange(lmin2, lmax2, .01)#.01
+                ul_ran2 = [lmin2, lmax2]
             else:
-                act_rango = False
+                act_rango2 = False
         except:
             messagebox.showwarning("Error","Introduzca los valores del rango de x, separado por coma.")
-            act_rango=False
-            ets.delete(0,len(ets.get()))
+            act_rango2=False
+            ets2.delete(0,len(ets2.get()))
     else:
-        if ul_ran!="":
-            x = np.arange(ul_ran[0],ul_ran[1], .01)#.01
+        if ul_ran2!="":
+            x = np.arange(ul_ran2[0],ul_ran2[1], 1)#.01
         else:
-            x = np.arange(1, 10, .01)#.01
+            x = np.arange(1, 2, 1)#.01
     try:
-        solo=eval(graph_data)
+        y =eval(graph_data2)
+        UDS = eval(Uds)
+        VDS = eval(Vds)
         ax1.clear()
-        ax1.plot(x,solo)
+        ax1.plot(VDS,UDS)
     except:
         ax1.plot()
     ax1.axhline(0, color="gray")
     ax1.axvline(0, color="gray")
     ani.event_source.stop() #DETIENE ANIMACIÓN
- 
+
 def represent():
-    global graph_data
-    global ran
-    global act_rango
-    texto_orig=et.get()
-    if ets.get()!="":
-        rann=ets.get()
-        ran=rann.split(",")
-        act_rango=True
-    ta=texto_orig.replace("sin","np.sin")
+    global Uds
+    global Vds
+    texto_origU=et.get()
+    texto_origV=ets.get()
+    ta=texto_origU.replace("sin","np.sin")
     tb=ta.replace("cos","np.cos")
-    tl=tb.replace("log","np.log")
-    tc=tl.replace("tan","np.tan")
-    tr=tc.replace("sqrt","np.sqrt")
-    te=tr.replace("exp","np.exp")
-    tpi=te.replace("pi","np.pi")
-    graph_data=tpi
+    tc=tb.replace("log","np.log")
+    td=tc.replace("tan","np.tan")
+    te=td.replace("sqrt","np.sqrt")
+    tf=te.replace("exp","np.exp")
+    tg=tf.replace("pi","np.pi")
+    Uds = tg
+    tA=texto_origV.replace("sin","np.sin")
+    tB=tA.replace("cos","np.cos")
+    tC=tB.replace("log","np.log")
+    tD=tC.replace("tan","np.tan")
+    tE=tD.replace("sqrt","np.sqrt")
+    tF=tE.replace("exp","np.exp")
+    tG=tF.replace("pi","np.pi")
+    Vds = tG
+
     ani.event_source.start() #INICIA/REANUDA ANIMACIÓN
+
+    
+
 
 def animate2(i):
     global act_rango2
     global ul_ran2
-    global Con
+
     if act_rango2==True:
         try:
             lmin2 = float(ran2[0]); lmax2 = float(ran2[1])
@@ -122,16 +135,13 @@ def animate2(i):
         solo=eval(graph_data2)
         ax2.clear()
         ax2.plot(x,solo)
-        Con = (x,solo)
-        print(Con)
     except:
         ax2.plot()
     ax2.axhline(0, color="gray")
     ax2.axvline(0, color="gray")
     ani2.event_source.stop() #DETIENE ANIMACIÓN
-    return Con
-
   
+
 def represent2():
     global graph_data2
     global ran2
@@ -160,23 +170,31 @@ plt.show()
  
 et = tkinter.Entry(master=root,width=60)
 et.config(bg="gray87", justify="left")
- 
-button = tkinter.Button(master=root, text="SET", bg="gray69", command=represent)
-button.pack(side=tkinter.BOTTOM)
- 
 et.pack(side=tkinter.BOTTOM)
-ets=tkinter.Entry(master=root,width=20)
-ets.config(bg="gray87")
-ets.pack(side=tkinter.RIGHT)
+etiqueta_U = ttk.Label(text="Ingrese U en términos de x,y")
+etiqueta_U.place(x=160,y=620)
+etiqueta_V = ttk.Label(text="Ingrese V en términos de x,y")
+etiqueta_V.place(x=160,y=638)
+
+
+button = tkinter.Button(master=root, text="SET", bg="gray69", command=represent)
+button.place(x=500 , y=675)
+ 
+
+ets=tkinter.Entry(master=root,width=60)
+ets.config(bg="gray87",justify="left")
+ets.pack(side=tkinter.BOTTOM)
+
 #ets.insert(0,"RANGO DE X")
 
 et2 = tkinter.Entry(master=root2,width=60)
 et2.config(bg="gray87", justify="left")
- 
+et2.pack(side=tkinter.BOTTOM)
+
 button2 = tkinter.Button(master=root2, text="SET", bg="gray69", command=represent2)
 button2.pack(side=tkinter.BOTTOM)
  
-et2.pack(side=tkinter.BOTTOM)
+
 ets2=tkinter.Entry(master=root2,width=20)
 ets2.config(bg="gray87")
 ets2.pack(side=tkinter.RIGHT)
